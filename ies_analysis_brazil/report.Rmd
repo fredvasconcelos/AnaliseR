@@ -1,0 +1,53 @@
+---
+title: "Educational Institutions Evaluation in Brazil"
+author: "Fred"
+date: "`r Sys.Date()`"
+output: 
+  rmdformats::readthedown:
+    highlight: kate
+    self_contained: true
+    thumbnails: false
+    lightbox: true
+    gallery: false
+number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# ETL
+
+## Load libraries
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(rstatix)
+library(tidyquant)
+```
+
+## Load data
+
+We use a indexed read mode for create a list with multiples data.frames.
+
+```{r}
+file_paths <- fs::dir_ls("/home/fredvasconcelos/Documentos/educacao/alunos/2009_2021/")
+
+listed_df_cursos <- file_paths %>%
+  map(function (path) {
+    read.csv(path, sep = ';', encoding = 'latin1')
+  }) %>%
+  tibble() 
+
+```
+
+## Create merged data.frame
+
+```{r}
+cursos <- listed_df_cursos %>%
+  unnest(cols = '.')
+```
+
+##
+
